@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerCollisionController : Singleton<PlayerCollisionController>
 {
-    [SerializeField] private GameObject _enemy;
+    private GameObject _enemy;
 
     public GameObject Enemy { get => _enemy; set => _enemy = value; }
 

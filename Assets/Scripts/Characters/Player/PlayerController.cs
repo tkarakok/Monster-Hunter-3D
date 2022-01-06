@@ -68,7 +68,7 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
         StartCoroutine(AnimatorTakeDamage());
         Hp -= hit;
         PlayerHP();
-        if (Hp < 0)
+        if (Hp <= 0)
         {
             StateManager.Instance.GameState = GameState.GameOver;
             animator.SetBool("Die",true);
