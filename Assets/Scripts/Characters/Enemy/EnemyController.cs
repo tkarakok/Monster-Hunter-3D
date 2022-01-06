@@ -59,11 +59,10 @@ public class EnemyController : MonoBehaviour , ICharacter
 
     IEnumerator Attack()
     {
-        if (Alive)
-        {
-            yield return new WaitForSeconds(.75f);
+        
+            yield return new WaitForSeconds(1.5f);
             InflictDamage();
-        }
+        
     }
 
     #endregion

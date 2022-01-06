@@ -10,9 +10,25 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("enemy"))
+        if (other.CompareTag("Enemy"))
         {
             Enemy = other.gameObject;
+            StartCoroutine(AnimatorBattle());
+            StartCoroutine(ChangeState());
         }
+    }
+
+    IEnumerator ChangeState()
+    {
+        yield return new WaitForSeconds(1);
+        StateManager.Instance.GameState = GameState.Battle;
+    }
+
+    IEnumerator AnimatorBattle()
+    {
+        PlayerController.Instance.animator.SetBool("InBattle", true);
+        PlayerController.Instance.animator.SetBool("InGame", false);
+        yield return new WaitForSeconds(1);
+        PlayerController.Instance.animator.SetBool("InBattle", false);
     }
 }

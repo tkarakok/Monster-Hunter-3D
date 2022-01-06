@@ -1,12 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : Singleton<PlayerController> , ICharacter
 {
+    
+    [Header("Player UI")]
+    public Text playerLevelText;
+    public Image hpBar;
+    
     public const int Max_Lvl = 5;
 
+    [Header("Player Fields")]
     [SerializeField] private PlayerFields playerFields = null;
+
+
+    [Header("Animation")]
+    public Animator animator;
 
     private int _level;
     private float _hp;
@@ -33,6 +44,8 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
         Hit = playerFields.hit;
         Xp = playerFields.xp;
         Bonus = playerFields.bonus;
+        PlayerLevel();
+        PlayerHP();
     }
 
     #region Damage Functions
@@ -45,23 +58,25 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
 
     public void InflictDamage()
     {
-        // player attac anim
+        StartCoroutine(AnimatorAttack());
         EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
         enemyController.TakeDamage(CalculateHit());
     }
 
     public void TakeDamage(float hit)
     {
-        // damage anim
+        StartCoroutine(AnimatorTakeDamage());
         Hp -= hit;
-        Debug.Log(Hp);
+        PlayerHP();
         if (Hp < 0)
         {
             StateManager.Instance.GameState = GameState.GameOver;
+            animator.SetBool("Die",true);
         }
         else
         {
             StateManager.Instance.BattleState = BattleState.PlayerTurn;
+            HitBarController.Instance.ResetHitBar();
         }
     }
     #endregion
@@ -86,5 +101,30 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
 
     #endregion
 
+    #region Player UI 
+    void PlayerLevel()
+    {
+        playerLevelText.text = Level.ToString();
+    }
+    void PlayerHP()
+    {
+        hpBar.fillAmount = Hp / 100;
+    }
+    #endregion
+
+    #region Animator Parameters
+    IEnumerator AnimatorAttack()
+    {
+        animator.SetBool("Attack",true);
+        yield return new WaitForSeconds(.26f);
+        animator.SetBool("Attack", false);
+    }
+    IEnumerator AnimatorTakeDamage()
+    {
+        animator.SetBool("TakeDamage", true);
+        yield return new WaitForSeconds(.26f);
+        animator.SetBool("TakeDamage", false);
+    }
+    #endregion
 
 }
