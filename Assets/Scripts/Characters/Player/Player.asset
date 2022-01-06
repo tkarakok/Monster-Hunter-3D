@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d541e19a1edf6f14db10cb587787883e, type: 3}
   m_Name: Player
   m_EditorClassIdentifier: 
+  playerSprite: {fileID: 21300000, guid: d61ba0c91f6dc7c40baaa490152cb9e2, type: 3}
+  playerName: Tuna
   level: 1
   hp: 100
   hit: 100
-  xp: 0
+  xp: 30
   bonus: 0

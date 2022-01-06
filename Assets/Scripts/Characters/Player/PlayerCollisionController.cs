@@ -15,6 +15,7 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
             Enemy = other.gameObject;
             StartCoroutine(AnimatorBattle());
             StartCoroutine(ChangeState());
+            
         }
     }
 
@@ -22,6 +23,7 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
     {
         yield return new WaitForSeconds(1);
         StateManager.Instance.GameState = GameState.Battle;
+        EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
     }
 
     IEnumerator AnimatorBattle()

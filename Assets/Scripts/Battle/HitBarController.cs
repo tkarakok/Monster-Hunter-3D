@@ -56,6 +56,7 @@ public class HitBarController : Singleton<HitBarController>
         hitButton.interactable = false;
         PlayerController.Instance.InflictDamage();
         StateManager.Instance.BattleState = BattleState.EnemyTurn;
+        //EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
     }
 
     public float CalculateMultiplier(float value)

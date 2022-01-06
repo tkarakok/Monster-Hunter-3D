@@ -15,8 +15,10 @@ public enum EnemyType
 public class EnemyFields : ScriptableObject
 {
     public EnemyType enemyType;
+    public Sprite enemySprite;
     public string enemyName;
     public int hp;
+    public int level;
     public int damage;
     public Vector3 scale;
 }

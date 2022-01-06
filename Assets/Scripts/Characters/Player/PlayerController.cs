@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : Singleton<PlayerController> , ICharacter
+public class PlayerController : Singleton<PlayerController>, ICharacter
 {
-    
-    [Header("Player UI")]
-    public Text playerLevelText;
-    public Image hpBar;
-    
+
+
     public const int Max_Lvl = 5;
 
     [Header("Player Fields")]
@@ -19,6 +16,9 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
     [Header("Animation")]
     public Animator animator;
 
+    [HideInInspector]
+    public Sprite playerSprite;
+    private string _playerName;
     private int _level;
     private float _hp;
     private float _hit;
@@ -34,18 +34,19 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
     public float Hp { get => _hp; set => _hp = value; }
     public float Hit { get => _hit; set => _hit = value; }
     public bool Alive { get => _alive; set => _alive = value; }
+    public string PlayerName { get => _playerName; set => _playerName = value; }
 
     #endregion
 
     private void Start()
     {
+        playerSprite = playerFields.playerSprite;
+        PlayerName = playerFields.playerName;
         Level = playerFields.level;
         Hp = playerFields.hp;
         Hit = playerFields.hit;
         Xp = playerFields.xp;
         Bonus = playerFields.bonus;
-        PlayerLevel();
-        PlayerHP();
     }
 
     #region Damage Functions
@@ -61,21 +62,25 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
         StartCoroutine(AnimatorAttack());
         EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
         enemyController.TakeDamage(CalculateHit());
+        EarnXp(CalculateHit() / 2);
+
     }
 
     public void TakeDamage(float hit)
     {
         StartCoroutine(AnimatorTakeDamage());
         Hp -= hit;
-        PlayerHP();
+        UIManager.Instance.PlayerHP();
         if (Hp <= 0)
         {
             StateManager.Instance.GameState = GameState.GameOver;
-            animator.SetBool("Die",true);
+            // event
+            animator.SetBool("Die", true);
         }
         else
         {
             StateManager.Instance.BattleState = BattleState.PlayerTurn;
+           // EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
             HitBarController.Instance.ResetHitBar();
         }
     }
@@ -86,7 +91,9 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
     public void LevelUp()
     {
         Level += 1;
-        // level upgrade event
+        Hit = 200;
+        transform.localScale += new Vector3(.25f,.25f,.25f);
+        UIManager.Instance.PlayerUIUpdate();
     }
 
     public void EarnXp(float xp)
@@ -97,25 +104,20 @@ public class PlayerController : Singleton<PlayerController> , ICharacter
             Xp -= 100;
             LevelUp();
         }
+        else
+        {
+            UIManager.Instance.PlayerXP();
+        }
     }
 
     #endregion
 
-    #region Player UI 
-    void PlayerLevel()
-    {
-        playerLevelText.text = Level.ToString();
-    }
-    void PlayerHP()
-    {
-        hpBar.fillAmount = Hp / 100;
-    }
-    #endregion
+
 
     #region Animator Parameters
     IEnumerator AnimatorAttack()
     {
-        animator.SetBool("Attack",true);
+        animator.SetBool("Attack", true);
         yield return new WaitForSeconds(.26f);
         animator.SetBool("Attack", false);
     }
