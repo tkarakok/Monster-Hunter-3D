@@ -59,17 +59,16 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
 
     public void InflictDamage()
     {
-        StartCoroutine(AnimatorAttack());
         EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
         enemyController.TakeDamage(CalculateHit());
         EarnXp(CalculateHit() / 2);
-
+        AnimationManager.Instance.StartPlayerAttackAnimation();
     }
 
     public void TakeDamage(float hit)
     {
-        StartCoroutine(AnimatorTakeDamage());
         Hp -= hit;
+        AnimationManager.Instance.StartPlayerTakeDamageAnimation();
         UIManager.Instance.PlayerHP();
         if (Hp <= 0)
         {
@@ -80,8 +79,7 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         else
         {
             StateManager.Instance.BattleState = BattleState.PlayerTurn;
-           // EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
-            HitBarController.Instance.ResetHitBar();
+            EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
         }
     }
     #endregion
@@ -112,21 +110,5 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
 
     #endregion
 
-
-
-    #region Animator Parameters
-    IEnumerator AnimatorAttack()
-    {
-        animator.SetBool("Attack", true);
-        yield return new WaitForSeconds(.26f);
-        animator.SetBool("Attack", false);
-    }
-    IEnumerator AnimatorTakeDamage()
-    {
-        animator.SetBool("TakeDamage", true);
-        yield return new WaitForSeconds(.26f);
-        animator.SetBool("TakeDamage", false);
-    }
-    #endregion
 
 }

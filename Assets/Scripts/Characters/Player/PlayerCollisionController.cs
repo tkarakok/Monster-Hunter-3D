@@ -13,9 +13,8 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
         if (other.CompareTag("Enemy"))
         {
             Enemy = other.gameObject;
-            StartCoroutine(AnimatorBattle());
             StartCoroutine(ChangeState());
-            
+
         }
     }
 
@@ -26,11 +25,5 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
         EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
     }
 
-    IEnumerator AnimatorBattle()
-    {
-        PlayerController.Instance.animator.SetBool("InBattle", true);
-        PlayerController.Instance.animator.SetBool("InGame", false);
-        yield return new WaitForSeconds(1);
-        PlayerController.Instance.animator.SetBool("InBattle", false);
-    }
+    
 }

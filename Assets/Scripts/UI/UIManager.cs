@@ -25,6 +25,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject mainMenuPanel;
     public GameObject inGamePanel;
     public GameObject battlePanel;
+    public GameObject hitPanel;
 
 
     #region Button Functions
@@ -32,8 +33,8 @@ public class UIManager : Singleton<UIManager>
     {
         mainMenuPanel.SetActive(false);
         inGamePanel.SetActive(true);
+        EventManager.Instance.FirstStartGame();
         StateManager.Instance.GameState = GameState.InGame;
-        EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
     }
     #endregion
 
@@ -49,7 +50,6 @@ public class UIManager : Singleton<UIManager>
         battlePanel.SetActive(false);
     }
     #endregion
-
 
     #region Enemy UI
     public void EnemyUIUpdate()
@@ -116,5 +116,16 @@ public class UIManager : Singleton<UIManager>
         PlayerBar.SetParent(PlayerParentBar);
     }
 
+    #endregion
+
+    #region HitBar Open/Close
+    public void OpenHitPanel()
+    {
+        hitPanel.SetActive(true);
+    }
+    public void CloseHitPanel()
+    {
+        hitPanel.SetActive(false);
+    }
     #endregion
 }

@@ -6,27 +6,26 @@ public class EventManager : Singleton<EventManager>
 {
     #region GameState Events
     public delegate void GameStateAction();
-    public event GameStateAction MainMenu;
-    public event GameStateAction InGame;
-    public event GameStateAction GameOver;
-    public event GameStateAction EndGame;
-    public event GameStateAction Battle;
+    public  GameStateAction MainMenu;
+    public  GameStateAction InGame;
+    public  GameStateAction GameOver;
+    public  GameStateAction EndGame;
+    public  GameStateAction Battle;
+    public  GameStateAction FirstStartGame;
     #endregion
 
     #region Battle Events
-    /*
-    public delegate void InBattleActions();
-    public event InBattleActions PlayerTurn;
-    public event InBattleActions EnemyTurn;
-    */
+    public delegate void BattleStateActions();
+    public BattleStateActions PlayerTurn;
+    public BattleStateActions EnemyTurn;
     #endregion
 
+    
     private void Start()
     {
         StartCoroutine(SubscribeAllEvents());
     }
     
-
 
     public void CheckGameStateEvent(GameState gameState)
     {
@@ -48,7 +47,7 @@ public class EventManager : Singleton<EventManager>
                 break;
         }
     }
-    /*
+    
     public void CheckBattleStateEvent(BattleState battleState)
     {
         switch (battleState)
@@ -63,30 +62,32 @@ public class EventManager : Singleton<EventManager>
                 break;
         }
     }
-    */
+    
     IEnumerator SubscribeAllEvents()
     {
         yield return new WaitForSeconds(.15f);
         #region GameState Events Subscribe
+        // first start game
+        FirstStartGame += AnimationManager.Instance.InGameAnimation;
+        FirstStartGame += UIManager.Instance.PlayerUIUpdate;
         //ýn game state
-        InGame += UIManager.Instance.PlayerUIUpdate;
         InGame += UIManager.Instance.PlayerBarBackParent;
         InGame += UIManager.Instance.GoBackInGamePanelFromBattle;
         // battle state
+        Battle += AnimationManager.Instance.StartBattleAnimation;
         Battle += UIManager.Instance.EnemyUIUpdate;
         Battle += UIManager.Instance.GoBattlePanel;
         Battle += UIManager.Instance.PlayerBarChangeParent;
         #endregion
-        /*
+
         #region BattleState Events Subscribe
+        //enemy turn
+        EnemyTurn += UIManager.Instance.CloseHitPanel;
         // player turn
-        
+        PlayerTurn += UIManager.Instance.OpenHitPanel;
         PlayerTurn += HitBarController.Instance.ResetHitBar;
-        PlayerTurn += UIManager.Instance.PlayerHP;
-        PlayerTurn += UIManager.Instance.PlayerXP;
-        //ENEMY TURN
-        EnemyTurn += UIManager.Instance.EnemyUIUpdate;
-        #endregion*/
+        #endregion
+
     }
 
 }

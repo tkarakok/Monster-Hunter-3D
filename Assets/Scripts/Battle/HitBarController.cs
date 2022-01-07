@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class HitBarController : Singleton<HitBarController>
 {
     public Image powerImage;
-    public Button hitButton;
     private float _multiplier;
     private float _power = 0;
     private float _powerSpeed = 100;
@@ -53,10 +52,9 @@ public class HitBarController : Singleton<HitBarController>
     public void HitButtonFunction()
     {
         Multiplier = powerImage.fillAmount;
-        hitButton.interactable = false;
         PlayerController.Instance.InflictDamage();
         StateManager.Instance.BattleState = BattleState.EnemyTurn;
-        //EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
+        EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
     }
 
     public float CalculateMultiplier(float value)
@@ -80,7 +78,6 @@ public class HitBarController : Singleton<HitBarController>
     {
         _power = 0;
         _max = false;
-        hitButton.interactable = true;
         StateManager.Instance.BattleState = BattleState.PlayerTurn;
     }
 }

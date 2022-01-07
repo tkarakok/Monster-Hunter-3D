@@ -25,13 +25,15 @@ public class EnemyController : MonoBehaviour, ICharacter
     public bool Alive { get => _alive; set => _alive = value; }
     public Sprite EnemySprite { get => _enemySprite; set => _enemySprite = value; }
     public int EnemyLevel { get => _enemyLevel; set => _enemyLevel = value; }
+    public Animator Animator { get => _animator; set => _animator = value; }
 
 
     #endregion
 
     void Start()
     {
-        _animator = GetComponent<Animator>();
+        
+        Animator = GetComponent<Animator>();
         EnemySprite = enemyFields.enemySprite;
         EnemyType = enemyFields.enemyType;
         EnemyName = enemyFields.enemyName;
@@ -42,7 +44,6 @@ public class EnemyController : MonoBehaviour, ICharacter
     }
 
     #region Damage Functions
-
     public void InflictDamage()
     {
         PlayerController.Instance.TakeDamage(Damage);
@@ -50,42 +51,37 @@ public class EnemyController : MonoBehaviour, ICharacter
 
     public void TakeDamage(float hit)
     {
-        StartCoroutine(TakeDamageAnimation());
+        StartCoroutine(EnemyTakeDamageAnimation());
         Hp -= hit;
         UIManager.Instance.EnemyUIUpdate();
         if (Hp <= 0)
         {
-            _animator.SetBool("Die", true);
+            Animator.SetBool("Die", true);
             Alive = false;
             StateManager.Instance.GameState = GameState.InGame;
             EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
         }
         else
         {
-            StateManager.Instance.BattleState = BattleState.EnemyTurn;
-            StartCoroutine(Attack());
+            StartCoroutine(EnemyAttackAnimation());
         }
-        // event 
-    }
-
-    IEnumerator Attack()
-    {
-
-        yield return new WaitForSeconds(1.5f);
-        _animator.SetBool("Attack", true);
-        InflictDamage();
-        yield return new WaitForSeconds(.5f);
-        _animator.SetBool("Attack", false);
-    }
-
-    IEnumerator TakeDamageAnimation()
-    {
-        yield return new WaitForSeconds(.5f);
-        _animator.SetBool("TakeDamage", true);
-        yield return new WaitForSeconds(.5f);
-        _animator.SetBool("TakeDamage", false);
     }
 
     #endregion
+    IEnumerator EnemyAttackAnimation()
+    {
+        yield return new WaitForSeconds(1.5f);
+        Animator.SetBool("Attack", true);
+        InflictDamage();
+        yield return new WaitForSeconds(.5f);
+        Animator.SetBool("Attack", false);
+    }
+    IEnumerator EnemyTakeDamageAnimation()
+    {
+        yield return new WaitForSeconds(.5f);
+        Animator.SetBool("TakeDamage", true);
+        yield return new WaitForSeconds(.5f);
+        Animator.SetBool("TakeDamage", false);
+    }
 
 }
