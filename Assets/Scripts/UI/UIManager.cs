@@ -121,7 +121,11 @@ public class UIManager : Singleton<UIManager>
     #region HitBar Open/Close
     public void OpenHitPanel()
     {
-        hitPanel.SetActive(true);
+        if (!hitPanel.activeInHierarchy)
+        {
+            hitPanel.SetActive(true);
+        }
+
     }
     public void CloseHitPanel()
     {

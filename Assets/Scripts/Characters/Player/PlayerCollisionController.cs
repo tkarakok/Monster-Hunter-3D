@@ -12,9 +12,20 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
     {
         if (other.CompareTag("Enemy"))
         {
+            HitBarController.Instance.ResetHitBar();
             Enemy = other.gameObject;
             StartCoroutine(ChangeState());
 
+        }
+        else if (other.CompareTag("Xp"))
+        {
+            PlayerController.Instance.EarnXp(40);
+            Destroy(other.gameObject);
+        }
+        else if (other.CompareTag("Diamond"))
+        {
+            PlayerController.Instance.Diamond++;
+            Destroy(other.gameObject);
         }
     }
 

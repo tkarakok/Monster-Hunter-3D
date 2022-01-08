@@ -23,7 +23,8 @@ public class AnimationManager : Singleton<AnimationManager>
     {
         StartCoroutine(PlayerTakeDamageAnimation());
     }
-   
+    
+
     IEnumerator BattleAnimation()
     {
         // transition battle state
@@ -46,6 +47,5 @@ public class AnimationManager : Singleton<AnimationManager>
         yield return new WaitForSeconds(.26f);
         PlayerController.Instance.animator.SetBool("TakeDamage", false);
     }
-    // enemy atack and damage
    
 }

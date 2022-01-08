@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class EnemyController : MonoBehaviour, ICharacter
 {
+    public GameObject xpPrefab, diammondPrefab;
     [SerializeField] private EnemyFields enemyFields = null;
 
     private EnemyType _enemyType;
@@ -32,7 +33,7 @@ public class EnemyController : MonoBehaviour, ICharacter
 
     void Start()
     {
-        
+
         Animator = GetComponent<Animator>();
         EnemySprite = enemyFields.enemySprite;
         EnemyType = enemyFields.enemyType;
@@ -56,15 +57,24 @@ public class EnemyController : MonoBehaviour, ICharacter
         UIManager.Instance.EnemyUIUpdate();
         if (Hp <= 0)
         {
-            Animator.SetBool("Die", true);
-            Alive = false;
-            StateManager.Instance.GameState = GameState.InGame;
-            EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
+
+            StartCoroutine(ChangeAfterBttleState());
+            Die();
         }
         else
         {
             StartCoroutine(EnemyAttackAnimation());
         }
+    }
+
+    void Die()
+    {
+        Animator.SetBool("Die", true);
+        Alive = false;
+        Destroy(gameObject, 1);
+        Instantiate(xpPrefab,transform.position,Quaternion.identity);
+        Instantiate(diammondPrefab,transform.position + new Vector3(.5f,0,0),Quaternion.identity);
+        
     }
 
     #endregion
@@ -82,6 +92,12 @@ public class EnemyController : MonoBehaviour, ICharacter
         Animator.SetBool("TakeDamage", true);
         yield return new WaitForSeconds(.5f);
         Animator.SetBool("TakeDamage", false);
+    }
+    IEnumerator ChangeAfterBttleState()
+    {
+        yield return new WaitForSeconds(.7f);
+        StateManager.Instance.GameState = GameState.InGame;
+        EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
     }
 
 }

@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Enemy5
   m_EditorClassIdentifier: 
   enemyType: 4
+  enemySprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   enemyName: Boss
   hp: 500
+  level: 5
   damage: 50
-  scale: {x: 1.5, y: 1.5, z: 1.5}
+  scale: {x: 0.8, y: 0.8, z: 0.8}

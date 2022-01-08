@@ -79,5 +79,6 @@ public class HitBarController : Singleton<HitBarController>
         _power = 0;
         _max = false;
         StateManager.Instance.BattleState = BattleState.PlayerTurn;
+        UIManager.Instance.hitPanel.SetActive(true);
     }
 }

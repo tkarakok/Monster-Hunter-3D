@@ -20,7 +20,8 @@ public class EventManager : Singleton<EventManager>
     public BattleStateActions EnemyTurn;
     #endregion
 
-    
+
+
     private void Start()
     {
         StartCoroutine(SubscribeAllEvents());
@@ -72,6 +73,7 @@ public class EventManager : Singleton<EventManager>
         FirstStartGame += UIManager.Instance.PlayerUIUpdate;
         //ýn game state
         InGame += UIManager.Instance.PlayerBarBackParent;
+        InGame += AnimationManager.Instance.InGameAnimation;
         InGame += UIManager.Instance.GoBackInGamePanelFromBattle;
         // battle state
         Battle += AnimationManager.Instance.StartBattleAnimation;
@@ -87,6 +89,8 @@ public class EventManager : Singleton<EventManager>
         PlayerTurn += UIManager.Instance.OpenHitPanel;
         PlayerTurn += HitBarController.Instance.ResetHitBar;
         #endregion
+
+        
 
     }
 

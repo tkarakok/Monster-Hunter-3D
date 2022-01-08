@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Enemy2
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   enemyType: 1
+  enemySprite: {fileID: 21300000, guid: a8a4b86588c581544a9662b1907bcf82, type: 3}
   enemyName: Ghaspo
   hp: 200
+  level: 2
   damage: 20
-  scale: {x: 0.75, y: 0.75, z: 0.75}
+  scale: {x: 0.8, y: 0.8, z: 0.8}

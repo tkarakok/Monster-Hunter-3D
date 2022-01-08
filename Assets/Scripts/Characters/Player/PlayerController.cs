@@ -5,8 +5,6 @@ using UnityEngine.UI;
 
 public class PlayerController : Singleton<PlayerController>, ICharacter
 {
-
-
     public const int Max_Lvl = 5;
 
     [Header("Player Fields")]
@@ -27,6 +25,8 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
 
     private bool _alive = true;
 
+    private int _diamond;
+
     #region EnCapsulation
     public float Xp { get => _xp; set => _xp = value; }
     public int Bonus { get => _bonus; set => _bonus = value; }
@@ -35,11 +35,13 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
     public float Hit { get => _hit; set => _hit = value; }
     public bool Alive { get => _alive; set => _alive = value; }
     public string PlayerName { get => _playerName; set => _playerName = value; }
+    public int Diamond { get => _diamond; set => _diamond = value; }
 
     #endregion
 
     private void Start()
     {
+        Diamond = PlayerPrefs.GetInt("Diamond");
         playerSprite = playerFields.playerSprite;
         PlayerName = playerFields.playerName;
         Level = playerFields.level;
@@ -48,6 +50,7 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         Xp = playerFields.xp;
         Bonus = playerFields.bonus;
     }
+
 
     #region Damage Functions
 
@@ -59,10 +62,11 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
 
     public void InflictDamage()
     {
+        AnimationManager.Instance.StartPlayerAttackAnimation();
         EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
         enemyController.TakeDamage(CalculateHit());
         EarnXp(CalculateHit() / 2);
-        AnimationManager.Instance.StartPlayerAttackAnimation();
+        
     }
 
     public void TakeDamage(float hit)
@@ -72,15 +76,21 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         UIManager.Instance.PlayerHP();
         if (Hp <= 0)
         {
-            StateManager.Instance.GameState = GameState.GameOver;
+            Die();
             // event
-            animator.SetBool("Die", true);
+            
         }
         else
         {
             StateManager.Instance.BattleState = BattleState.PlayerTurn;
             EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
         }
+    }
+
+    void Die()
+    {
+        StateManager.Instance.GameState = GameState.GameOver;
+        animator.SetBool("Die", true);
     }
     #endregion
 
