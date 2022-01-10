@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
+using DG.Tweening;
 
 public class EnemyController : MonoBehaviour, ICharacter
 {
-    public GameObject xpPrefab, diammondPrefab;
+    public GameObject xpPrefab, diammondPrefab,wizardRayPrefab;
+    public Transform wizardPrefabStartPosition;
     [SerializeField] private EnemyFields enemyFields = null;
 
     private EnemyType _enemyType;
@@ -16,6 +17,7 @@ public class EnemyController : MonoBehaviour, ICharacter
     private int _enemyLevel;
 
     private bool _alive = true;
+    private bool _escape = true;
     private Animator _animator;
 
     #region EnCapsulation
@@ -44,17 +46,24 @@ public class EnemyController : MonoBehaviour, ICharacter
         transform.localScale = enemyFields.scale;
     }
 
+    
     #region Damage Functions
     public void InflictDamage()
     {
         PlayerController.Instance.TakeDamage(Damage);
+        if (EnemyType == EnemyType.enemy2)
+        {
+            GameObject wizardRay = Instantiate(wizardRayPrefab, wizardPrefabStartPosition.position, Quaternion.identity);
+            wizardRay.transform.DOMove(PlayerController.Instance.gameObject.transform.position, .45f);
+        }
     }
 
     public void TakeDamage(float hit)
     {
         StartCoroutine(EnemyTakeDamageAnimation());
         Hp -= hit;
-        UIManager.Instance.EnemyUIUpdate();
+        Debug.Log(Hp);
+        UIManager.Instance.EnemyTakeDamageHp(PlayerCollisionController.Instance.EnemyController);
         if (Hp <= 0)
         {
 
@@ -72,9 +81,13 @@ public class EnemyController : MonoBehaviour, ICharacter
         Animator.SetBool("Die", true);
         Alive = false;
         Destroy(gameObject, 1);
-        Instantiate(xpPrefab,transform.position,Quaternion.identity);
-        Instantiate(diammondPrefab,transform.position + new Vector3(.5f,0,0),Quaternion.identity);
-        
+        if (PlayerController.Instance.Level != PlayerController.Max_Lvl)
+        {
+            Instantiate(xpPrefab, transform.position, Quaternion.identity);
+            Instantiate(diammondPrefab, transform.position + new Vector3(.5f, 0, 0), Quaternion.identity);
+        }
+        CameraController.Instance.BackToMainCamera();
+        PlayerCollisionController.Instance.EnemyController = null;
     }
 
     #endregion
@@ -99,5 +112,5 @@ public class EnemyController : MonoBehaviour, ICharacter
         StateManager.Instance.GameState = GameState.InGame;
         EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
     }
-
+   
 }

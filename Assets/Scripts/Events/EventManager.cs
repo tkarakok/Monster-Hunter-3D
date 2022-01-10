@@ -76,6 +76,7 @@ public class EventManager : Singleton<EventManager>
         InGame += AnimationManager.Instance.InGameAnimation;
         InGame += UIManager.Instance.GoBackInGamePanelFromBattle;
         // battle state
+        Battle += CameraController.Instance.ChangeCamera;
         Battle += AnimationManager.Instance.StartBattleAnimation;
         Battle += UIManager.Instance.EnemyUIUpdate;
         Battle += UIManager.Instance.GoBattlePanel;

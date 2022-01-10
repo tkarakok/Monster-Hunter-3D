@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy5
   m_EditorClassIdentifier: 
   enemyType: 4
-  enemySprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  enemySprite: {fileID: 21300000, guid: 6022b9fdf11b1ea47b3e7c0b5459171b, type: 3}
   enemyName: Boss
   hp: 500
   level: 5

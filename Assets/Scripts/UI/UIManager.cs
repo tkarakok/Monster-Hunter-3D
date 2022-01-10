@@ -9,7 +9,9 @@ public class UIManager : Singleton<UIManager>
     public Image playerSprite;
     public Text playerName;
     public Text playerLevelText;
-    public Image playerhpBar;
+    public Text playerMaxLevelText;
+    public Image playerHpBar;
+    public Image playerHpDamageBar;
     public Image xpBar;
     public Transform PlayerBar;
     public Transform PlayerParentBar;
@@ -54,11 +56,35 @@ public class UIManager : Singleton<UIManager>
     #region Enemy UI
     public void EnemyUIUpdate()
     {
-        EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
+        EnemyController enemyController = PlayerCollisionController.Instance.EnemyController;
         EnemyImage(enemyController);
         EnemyName(enemyController);
         EnemyLevel(enemyController);
         EnemyHP(enemyController);
+    }
+    public void EnemyTakeDamageHp(EnemyController enemyController)
+    {
+        if (enemyController.EnemyType == EnemyType.enemy1)
+        {
+            enemyHpBar.fillAmount = enemyController.Hp / 100;
+        }
+        else if (enemyController.EnemyType == EnemyType.enemy2)
+        {
+            enemyHpBar.fillAmount = enemyController.Hp / 200;
+        }
+        else if (enemyController.EnemyType == EnemyType.enemy3)
+        {
+            enemyHpBar.fillAmount = enemyController.Hp / 300;
+        }
+        else if (enemyController.EnemyType == EnemyType.enemy4)
+        {
+            enemyHpBar.fillAmount = enemyController.Hp / 400;
+        }
+        else if (enemyController.EnemyType == EnemyType.enemy5)
+        {
+            enemyHpBar.fillAmount = enemyController.Hp / 500;
+        }
+
     }
     public void EnemyImage(EnemyController enemyController)
     {
@@ -76,6 +102,7 @@ public class UIManager : Singleton<UIManager>
     {
         enemyHpBar.fillAmount = enemyController.Hp / 100;
     }
+   
     #endregion
 
     #region Player UI 
@@ -86,6 +113,7 @@ public class UIManager : Singleton<UIManager>
         PlayerXP();
         PlayerImage();
         PlayerName();
+       
     }
     public void PlayerLevel()
     {
@@ -93,11 +121,27 @@ public class UIManager : Singleton<UIManager>
     }
     public void PlayerHP()
     {
-        playerhpBar.fillAmount = PlayerController.Instance.Hp / 100;
+        playerHpBar.fillAmount = PlayerController.Instance.Hp / 100;
+        StartCoroutine(PlayerTakeDamageHpBar());
+
+    }
+    public IEnumerator PlayerTakeDamageHpBar()
+    {
+        yield return new WaitForSeconds(.25f);
+        playerHpDamageBar.fillAmount = PlayerController.Instance.Hp / 100;
     }
     public void PlayerXP()
     {
-        xpBar.fillAmount = PlayerController.Instance.Xp / 100;
+        if (PlayerController.Instance.Level == PlayerController.Max_Lvl)
+        {
+            xpBar.fillAmount = 0;
+        }
+        else
+        {
+            xpBar.fillAmount = PlayerController.Instance.Xp / 100;
+
+        }
+        
     }
     public void PlayerImage()
     {

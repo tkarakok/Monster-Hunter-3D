@@ -23,7 +23,10 @@ public class AnimationManager : Singleton<AnimationManager>
     {
         StartCoroutine(PlayerTakeDamageAnimation());
     }
-    
+    public void StartPlayerEscapeDamageAnimation()
+    {
+        StartCoroutine(PlayerTakeEscapeDamageAnimation());
+    }
 
     IEnumerator BattleAnimation()
     {
@@ -47,5 +50,13 @@ public class AnimationManager : Singleton<AnimationManager>
         yield return new WaitForSeconds(.26f);
         PlayerController.Instance.animator.SetBool("TakeDamage", false);
     }
-   
+    IEnumerator PlayerTakeEscapeDamageAnimation()
+    {
+        PlayerController.Instance.animator.SetBool("Run",false);
+        PlayerController.Instance.animator.SetBool("TakeDamage", true);
+        yield return new WaitForSeconds(.26f);
+        PlayerController.Instance.animator.SetBool("Run", true);
+        PlayerController.Instance.animator.SetBool("TakeDamage", false);
+    }
+
 }

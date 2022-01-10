@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy2
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   enemyType: 1
-  enemySprite: {fileID: 21300000, guid: a8a4b86588c581544a9662b1907bcf82, type: 3}
+  enemySprite: {fileID: 21300000, guid: a52ce19755e4f7f4e88b21613b5b57e9, type: 3}
   enemyName: Ghaspo
   hp: 200
   level: 2

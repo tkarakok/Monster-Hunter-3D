@@ -56,16 +56,19 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
 
     public float CalculateHit()
     {
-        Hit *= HitBarController.Instance.CalculateMultiplier(HitBarController.Instance.Multiplier);
-        return Hit;
+        float damage = Hit * HitBarController.Instance.Multiplier;
+        return damage;
     }
 
     public void InflictDamage()
     {
         AnimationManager.Instance.StartPlayerAttackAnimation();
-        EnemyController enemyController = PlayerCollisionController.Instance.Enemy.GetComponent<EnemyController>();
+        EnemyController enemyController = PlayerCollisionController.Instance.EnemyController;
         enemyController.TakeDamage(CalculateHit());
-        EarnXp(CalculateHit() / 2);
+        if (Level < Max_Lvl)
+        {
+            EarnXp(CalculateHit() / 2);
+        }
         
     }
 
@@ -78,7 +81,6 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         {
             Die();
             // event
-            
         }
         else
         {
@@ -99,7 +101,11 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
     public void LevelUp()
     {
         Level += 1;
-        Hit = 200;
+        if (Level == Max_Lvl)
+        {
+            UIManager.Instance.playerMaxLevelText.text = "Max Lvl.";
+        }
+        Hit += 100;
         transform.localScale += new Vector3(.25f,.25f,.25f);
         UIManager.Instance.PlayerUIUpdate();
     }

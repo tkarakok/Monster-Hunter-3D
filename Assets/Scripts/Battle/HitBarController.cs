@@ -52,6 +52,7 @@ public class HitBarController : Singleton<HitBarController>
     public void HitButtonFunction()
     {
         Multiplier = powerImage.fillAmount;
+        Multiplier = CalculateMultiplier(Multiplier);
         PlayerController.Instance.InflictDamage();
         StateManager.Instance.BattleState = BattleState.EnemyTurn;
         EventManager.Instance.CheckBattleStateEvent(StateManager.Instance.BattleState);
@@ -78,6 +79,7 @@ public class HitBarController : Singleton<HitBarController>
     {
         _power = 0;
         _max = false;
+        Multiplier = 0;
         StateManager.Instance.BattleState = BattleState.PlayerTurn;
         UIManager.Instance.hitPanel.SetActive(true);
     }

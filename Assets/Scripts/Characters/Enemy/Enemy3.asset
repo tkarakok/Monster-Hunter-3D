@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Enemy3
   m_EditorClassIdentifier: 
   enemyType: 2
-  enemySprite: {fileID: 21300000, guid: d61ba0c91f6dc7c40baaa490152cb9e2, type: 3}
+  enemySprite: {fileID: 21300000, guid: 61bcb716cf88d0248af838e5823c613a, type: 3}
   enemyName: Porx
   hp: 300
   level: 3

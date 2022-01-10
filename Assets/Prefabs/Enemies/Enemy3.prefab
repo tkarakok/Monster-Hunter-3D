@@ -633,7 +633,7 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 2.2334576, z: 4.1043353}
+  m_Size: {x: 10, y: 2.2334576, z: 4.1043353}
   m_Center: {x: 0, y: 0.6167288, z: 1.5521677}
 --- !u!114 &6165369068432507990
 MonoBehaviour:
@@ -649,6 +649,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   xpPrefab: {fileID: 2665249350923176803, guid: 4b84aec4613b83c41bacc14c3c92a674, type: 3}
   diammondPrefab: {fileID: 1749497006009541460, guid: 5b410815c1cda044287201e5219bb1c3, type: 3}
+  wizardRayPrefab: {fileID: 0}
+  wizardPrefabStartPosition: {fileID: 0}
   enemyFields: {fileID: 11400000, guid: fd0a1c596dec64345a39a908cc9c4e8c, type: 2}
 --- !u!1 &6655397977893210552
 GameObject:
