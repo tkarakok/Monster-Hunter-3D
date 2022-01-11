@@ -38,8 +38,10 @@ public class EventManager : Singleton<EventManager>
                 InGame();
                 break;
             case GameState.EndGame:
+                EndGame();
                 break;
             case GameState.GameOver:
+                GameOver();
                 break;
             case GameState.Battle:
                 Battle();
@@ -81,6 +83,11 @@ public class EventManager : Singleton<EventManager>
         Battle += UIManager.Instance.EnemyUIUpdate;
         Battle += UIManager.Instance.GoBattlePanel;
         Battle += UIManager.Instance.PlayerBarChangeParent;
+        // game over state
+        GameOver += UIManager.Instance.GameOverPanel;
+        // end game state
+        EndGame += UIManager.Instance.EndGameDiamondCounter;
+        EndGame += UIManager.Instance.EndGamePanel;
         #endregion
 
         #region BattleState Events Subscribe

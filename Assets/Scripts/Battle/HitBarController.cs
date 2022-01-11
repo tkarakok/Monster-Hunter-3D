@@ -12,6 +12,7 @@ public class HitBarController : Singleton<HitBarController>
     private bool _max = false;
 
     public float Multiplier { get => _multiplier; set => _multiplier = value; }
+    public float PowerSpeed { get => _powerSpeed; set => _powerSpeed = value; }
 
     private void Start()
     {
@@ -29,7 +30,7 @@ public class HitBarController : Singleton<HitBarController>
     {
         if (!_max)
         {
-            _power += Time.deltaTime * _powerSpeed;
+            _power += Time.deltaTime * PowerSpeed;
             if (_power >= 100)
             {
                 _max = true;
@@ -38,7 +39,7 @@ public class HitBarController : Singleton<HitBarController>
         }
         else
         {
-            _power -= Time.deltaTime * _powerSpeed;
+            _power -= Time.deltaTime * PowerSpeed;
             if (_power <= 0)
             {
                 _max = false;

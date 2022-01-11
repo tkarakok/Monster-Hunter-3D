@@ -28,13 +28,20 @@ public class PlayerCollisionController : Singleton<PlayerCollisionController>
         else if (other.CompareTag("Diamond"))
         {
             PlayerController.Instance.Diamond++;
+            UIManager.Instance.DiamondCounter();
             Destroy(other.gameObject);
         }
         else if (other.CompareTag("WizardRay"))
         {
             Destroy(other);
         }
-       
+        else if (other.CompareTag("Finish"))
+        {
+            PlayerPrefs.SetInt("Level",(LevelManager.Instance.CurrentLevel+ 1));
+            StateManager.Instance.GameState = GameState.EndGame;
+            EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
+        }
+
     }
 
     IEnumerator ChangeState()

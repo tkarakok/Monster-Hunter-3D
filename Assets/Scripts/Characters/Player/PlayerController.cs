@@ -79,8 +79,7 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         UIManager.Instance.PlayerHP();
         if (Hp <= 0)
         {
-            Die();
-            // event
+            StartCoroutine(Die());
         }
         else
         {
@@ -89,10 +88,13 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
         }
     }
 
-    void Die()
+    IEnumerator Die()
     {
-        StateManager.Instance.GameState = GameState.GameOver;
         animator.SetBool("Die", true);
+        yield return new WaitForSeconds(1);
+        StateManager.Instance.GameState = GameState.GameOver;
+        EventManager.Instance.CheckGameStateEvent(StateManager.Instance.GameState);
+        
     }
     #endregion
 
@@ -101,6 +103,7 @@ public class PlayerController : Singleton<PlayerController>, ICharacter
     public void LevelUp()
     {
         Level += 1;
+        HitBarController.Instance.PowerSpeed += 50;
         if (Level == Max_Lvl)
         {
             UIManager.Instance.playerMaxLevelText.text = "Max Lvl.";

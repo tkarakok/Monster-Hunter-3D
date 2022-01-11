@@ -15,7 +15,8 @@ public class UIManager : Singleton<UIManager>
     public Image xpBar;
     public Transform PlayerBar;
     public Transform PlayerParentBar;
-
+    public Text diamondText;
+    public Text endGameDiamondText;
 
     [Header("Enemy UI")]
     public Image enemySprite;
@@ -27,7 +28,9 @@ public class UIManager : Singleton<UIManager>
     public GameObject mainMenuPanel;
     public GameObject inGamePanel;
     public GameObject battlePanel;
+    public GameObject gameOverPanel;
     public GameObject hitPanel;
+    public GameObject endGamePanel;
 
 
     #region Button Functions
@@ -37,6 +40,17 @@ public class UIManager : Singleton<UIManager>
         inGamePanel.SetActive(true);
         EventManager.Instance.FirstStartGame();
         StateManager.Instance.GameState = GameState.InGame;
+    }
+
+    public void RestartButton()
+    {
+        LevelManager.Instance.ChangeLevel("LEVEL " + LevelManager.Instance.CurrentLevel);
+    }
+
+    public void NextLevelButton()
+    {
+        LevelManager.Instance.GetLevelName();
+        LevelManager.Instance.ChangeLevel("LEVEL " + LevelManager.Instance.CurrentLevel);
     }
     #endregion
 
@@ -50,6 +64,16 @@ public class UIManager : Singleton<UIManager>
     {
         inGamePanel.SetActive(true);
         battlePanel.SetActive(false);
+    }
+    public void GameOverPanel()
+    {
+        battlePanel.SetActive(false);
+        gameOverPanel.SetActive(true);
+    }
+    public void EndGamePanel()
+    {
+        inGamePanel.SetActive(false);
+        endGamePanel.SetActive(true);
     }
     #endregion
 
@@ -113,7 +137,7 @@ public class UIManager : Singleton<UIManager>
         PlayerXP();
         PlayerImage();
         PlayerName();
-       
+        DiamondCounter();
     }
     public void PlayerLevel()
     {
@@ -159,7 +183,14 @@ public class UIManager : Singleton<UIManager>
     {
         PlayerBar.SetParent(PlayerParentBar);
     }
-
+    public void DiamondCounter()
+    {
+        diamondText.text = PlayerController.Instance.Diamond.ToString();
+    }
+    public void EndGameDiamondCounter()
+    {
+        endGameDiamondText.text = diamondText.text;
+    }
     #endregion
 
     #region HitBar Open/Close
